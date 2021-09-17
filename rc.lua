@@ -112,12 +112,7 @@ tags = {
     }
 }
 
-run_once("google-chrome")
-run_once("phpstorm")
-run_once(terminal)
-run_once("subl")
-run_once("telegram-desktop")
-run_once("discord")
+require("autostart")
 
 -- }}}
 
@@ -404,7 +399,7 @@ globalkeys = gears.table.join(
     -- My hotkeys
     awful.key({ modkey, "Mod1"    }, "l", function() awful.spawn("slock") end,
               {description = "lock by slock", group = "my"}),
-    awful.key({ }, "Print", function() awful.spawn("ksnip") end,
+    awful.key({ modkey }, "Print", function() awful.spawn("ksnip") end,
               {description = "take screenshot using ksnip", group = "my"})
 )
 
@@ -611,6 +606,16 @@ awful.rules.rules = {
             tag = "discord"
         }
     },   
+    {
+        rule = {
+            class = "Virt-manager"
+        },
+        properties = {
+            screen = 1,
+            tag = "VM"
+        }
+    },   
+
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
