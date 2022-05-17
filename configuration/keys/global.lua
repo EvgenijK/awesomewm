@@ -3,7 +3,6 @@ local awful = require('awful')
 local beautiful = require('beautiful')
 local menubar = require("menubar")
 require('awful.autofocus')
-require('module.lang-switch')
 
 local hotkeys_popup = require('awful.hotkeys_popup').widget
 
@@ -111,13 +110,33 @@ global_keys = gears.table.join(
     -- My hotkeys
     awful.key({ modkey, "Mod1"    }, "l", function() awful.spawn("slock") end,
               {description = "lock by slock", group = "my"}),
-    awful.key({ modkey }, "Print", function() awful.spawn("ksnip") end,
-              {description = "take screenshot using ksnip", group = "my"}),
-    awful.key({ modkey }, "space", function() kbdcfg.switch() end,
-              {description = "switch keyboard layout", group = "my"})
+
+    awful.key({ modkey }, "space", function() awesome.emit_signal('module::lang_switch:lang_switch') end,
+              {description = "switch keyboard layout", group = "my"}),
+
+    awful.key({ modkey, "Mod1"    }, "l", function() awful.spawn("slock") end,
+            {description = "lock by slock", group = "my"}),
+
+    awful.key({ modkey, "Mod1" }, "Left",
+        function()
+            if client.focus then
+                local screen = awful.screen.focused()
+                client.focus:move_to_screen(screen.index - 1)
+            end
+        end,
+        { description = "move focused client to previous screen", group = "screen" }
+    ),
+
+    awful.key({ modkey, "Mod1" }, "Right",
+        function()
+            if client.focus then
+                local screen = awful.screen.focused()
+                client.focus:move_to_screen(screen.index + 1)
+            end
+        end,
+        { description = "move focused client to next screen", group = "screen" }
+    )
 )
-
-
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.

@@ -46,8 +46,9 @@ awful.rules.rules = {
       }, properties = { floating = true }},
 
     -- Add titlebars to normal clients and dialogs
-    { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+    {
+        rule_any = { type = { "normal", "dialog" } },
+        properties = { titlebars_enabled = true }
     },
     {
         rule = {
@@ -55,7 +56,7 @@ awful.rules.rules = {
         },
         properties = {
             screen = 2,
-            tag = 'term' 
+            tag = 'term'
         }
     },
     {
@@ -84,7 +85,7 @@ awful.rules.rules = {
             screen = 1,
             tag = "browser"
         }
-    },   
+    },
     {
         rule = {
             class = "jetbrains-phpstorm"
@@ -93,7 +94,7 @@ awful.rules.rules = {
             screen = 1,
             tag = "phpStorm"
         }
-    },   
+    },
     {
         rule = {
             class = "discord"
@@ -102,7 +103,7 @@ awful.rules.rules = {
             screen = 2,
             tag = "discord"
         }
-    },   
+    },
     {
         rule = {
             class = "Virt-manager"

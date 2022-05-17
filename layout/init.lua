@@ -24,8 +24,6 @@ require('module.errors-handling')
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
-
-
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
 editor = os.getenv("vim") or "vim"
@@ -50,6 +48,9 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
+
+tags = require('layout.config.tags')
+
 
 -- }}}
 
@@ -92,12 +93,13 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
-
--- {{{ Wibar
--- Create a textclock widget
-mytextclock = wibox.widget.textclock()
-
--- Create a wibox for each screen and add it
+mykeyboardlayout:buttons(
+        gears.table.join(
+                awful.button({ }, 1, function()
+                    awesome.emit_signal('module::lang_switch:lang_switch')
+                end)
+        )
+)
 
 local function set_wallpaper(s)
     -- Wallpaper
@@ -111,26 +113,14 @@ local function set_wallpaper(s)
     end
 end
 
-
--- {{{ My tags
-tags = {
-    names = {
-        {"browser", "phpStorm", "VM", "4", "5", "6"},
-        {"term", "sublime", "telegram", "discord", "5"}
-    },
-    layout = {
-        {awful.layout.layouts[10], awful.layout.layouts[10], awful.layout.layouts[10], awful.layout.layouts[10], awful.layout.layouts[10], awful.layout.layouts[10]},
-        {awful.layout.layouts[10], awful.layout.layouts[10], awful.layout.layouts[10], awful.layout.layouts[10], awful.layout.layouts[10]}
-    }
-}
-
--- }}}
-
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
 screen_number = 0
 awful.screen.connect_for_each_screen(function(s)
+
+    local clock = require('widget.clock')(s)
+
     screen_number = screen_number + 1
     -- Wallpaper
     set_wallpaper(s)
@@ -175,7 +165,7 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
             wibox.widget.systray(),
-            mytextclock,
+            clock,
             s.mylayoutbox,
         },
     }
