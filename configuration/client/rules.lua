@@ -48,7 +48,7 @@ awful.rules.rules = {
     -- Add titlebars to normal clients and dialogs
     {
         rule_any = { type = { "normal", "dialog" } },
-        properties = { titlebars_enabled = true }
+        properties = { titlebars_enabled = false }
     },
     {
         rule = {
@@ -61,7 +61,7 @@ awful.rules.rules = {
     },
     {
         rule = {
-            class = "Sublime_text"
+            class = "sublime_text"
         },
         properties = {
             screen = 2,
@@ -83,7 +83,7 @@ awful.rules.rules = {
         },
         properties = {
             screen = 1,
-            tag = "browser"
+            tag = "web"
         }
     },
     {
@@ -92,7 +92,7 @@ awful.rules.rules = {
         },
         properties = {
             screen = 1,
-            tag = "phpStorm"
+            tag = "dev"
         }
     },
     {

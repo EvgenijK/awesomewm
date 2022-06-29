@@ -1,5 +1,6 @@
 local awful = require('awful')
 local gears = require('gears')
+local wibox = require("wibox")
 
 -- {{{ Helper functions
 local function client_menu_toggle_fn()

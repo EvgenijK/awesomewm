@@ -15,4 +15,5 @@ end
 
 for _, app in ipairs(apps.run_on_start_up) do
     run_once(app)
+    --awful.spawn_with_shell(app)
 end

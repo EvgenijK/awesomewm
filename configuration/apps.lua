@@ -43,6 +43,8 @@ return {
 		'telegram-desktop',
 		'discord',
 		'virt-manager',
+		'nitrogen --restore',
+		'ksnip',
 
 		-- scream audio sink for windows10 VM audio
     	-- 'scream-start',
