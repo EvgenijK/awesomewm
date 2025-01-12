@@ -3,18 +3,20 @@ local beautiful = require("beautiful")
 local hotkeys_popup = require("awful.hotkeys_popup")
 local freedesktop = require("freedesktop")
 
-myawesomemenu = {
+local config = require("config")
+
+local myawesomemenu = {
    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "manual", config.applications.terminal .. " -e man awesome" },
+   { "edit config", config.applications.editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
    { "quit", function() awesome.quit() end },
 }
 
-mymainmenu = awful.menu({ 
+local mymainmenu = awful.menu({
     items = { 
         { "awesome", myawesomemenu, beautiful.awesome_icon },
-        { "open terminal", terminal }
+        { "open terminal", config.applications.terminal }
     }
 })
 
@@ -24,8 +26,9 @@ mymainmenu = freedesktop.menu.build {
         -- other triads can be put here
     },
     after = {
-        { "Open terminal", terminal },
+        { "Open terminal", config.applications.terminal },
         -- other triads can be put here
     }
 }
 
+return mymainmenu
