@@ -3,6 +3,9 @@ local gears = require("gears")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
+local config = require("config")
+
+
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c)
@@ -20,6 +23,11 @@ end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
+
+    if config.titlebars == false then
+        return
+    end
+
     -- buttons for the titlebar
     local buttons = gears.table.join(
             awful.button({ }, 1, function()

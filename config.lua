@@ -15,5 +15,6 @@ return {
         layout = {
             { awful.layout.layouts[2], awful.layout.layouts[2], awful.layout.layouts[2], awful.layout.layouts[2], awful.layout.layouts[2], awful.layout.layouts[2] },
         }
-    }
+    },
+    titlebars = false,
 }
