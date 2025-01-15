@@ -416,3 +416,7 @@ require("signals")
 
 -- implementing XDG Autostart (xorg-xrdb and dex required)
 require("xdg_autostart")
+
+
+-- Start Polkit-agent -- need to check why it didnt start from xdg_autostart, because its already in autostart dir
+awful.spawn.once("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
