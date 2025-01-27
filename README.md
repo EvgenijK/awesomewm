@@ -6,6 +6,7 @@
 - XDG Autostart
   - xorg-xrdb
   - dex
+- xrandr  
 
 # Autostart
 

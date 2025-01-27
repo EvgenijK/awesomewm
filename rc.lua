@@ -28,6 +28,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 -- This is used later as the default terminal and editor to run.
 
 local config = require("config")
+local xrandr = require("xrandr")
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -298,7 +299,19 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "l", function()
                 awful.spawn(config.applications.screen_lock)
             end,
-            {description = "lock screen", group = "custom"})
+            {description = "lock screen", group = "custom"}),
+
+    -- Multi-screens
+    awful.key({ modkey, "Control" , "Shift" }, "p", function()
+        xrandr.xrandr()
+        end,
+        {description = "call xrandr", group = "multi-screens"}
+    ),
+    awful.key({ modkey, "Control", "Shift" }, "m", function()
+        xrandr.menu()
+    end,
+            {description = "show xrandr menu", group = "multi-screens"}
+    )
 )
 
 clientkeys = gears.table.join(
