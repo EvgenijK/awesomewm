@@ -306,11 +306,6 @@ globalkeys = gears.table.join(
         xrandr.xrandr()
         end,
         {description = "call xrandr", group = "multi-screens"}
-    ),
-    awful.key({ modkey, "Control", "Shift" }, "m", function()
-        xrandr.menu()
-    end,
-            {description = "show xrandr menu", group = "multi-screens"}
     )
 )
 
@@ -434,3 +429,5 @@ require("signals")
 
 -- implementing XDG Autostart (xorg-xrdb and dex required)
 require("xdg_autostart")
+
+xrandr.xrandr()

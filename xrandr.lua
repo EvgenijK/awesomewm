@@ -48,6 +48,16 @@ local function arrange(out)
         previous = new
     end
 
+    -- Here i change the order of permutations so longer ones are first
+    local choices_length = #choices
+    for i = 1, choices_length do
+        if i > choices_length / 2 then
+            break
+        end
+
+        choices[i], choices[choices_length - i + 1] = choices[choices_length - i + 1], choices[i]
+    end
+
     return choices
 end
 
