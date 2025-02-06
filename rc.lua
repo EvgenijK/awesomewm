@@ -306,6 +306,11 @@ globalkeys = gears.table.join(
         xrandr.xrandr()
         end,
         {description = "call xrandr", group = "multi-screens"}
+    ),
+    awful.key({ modkey, "Control", "Shift" }, "s", function()
+        xrandr.save_config()
+        end,
+        { description = "save current xrandr config", group = "multi-screens" }
     )
 )
 
