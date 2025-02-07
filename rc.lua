@@ -30,6 +30,8 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 local config = require("config")
 local xrandr = require("xrandr")
 
+local batteryarc_widget = require("widgets.batteryarc-widget.batteryarc")
+
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
@@ -180,6 +182,10 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
             wibox.widget.systray(),
+            batteryarc_widget({
+                show_current_level = true,
+                arc_thickness = 1,
+            }),
             mytextclock,
             s.mylayoutbox,
         },
