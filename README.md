@@ -33,6 +33,14 @@ It checks idle time and locks the screen.
 You can run `xfce4-screensaver-command --lock` to lock the screen.  
 Or `xflock4` if you have it.
 
+# Activate numpad on startup
+
+I'm using 
+```
+numlockx on
+```
+in autostart `.desktop` file 
+
 # Problems
 
 ## Chrome not using gnome keyring
