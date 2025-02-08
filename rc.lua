@@ -21,6 +21,16 @@ require("awful.hotkeys_popup.keys")
 
 require("error_handling")
 
+-- Custom widgets
+local batteryarc_widget = require("widgets.batteryarc-widget.batteryarc")
+local calendar_widget = require("widgets.calendar-widget.calendar")
+local cw = calendar_widget{
+    theme = 'nord',
+    placement = 'top_right',
+    auto_hide = true,
+    timeout = 1
+}
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
@@ -29,8 +39,6 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 local config = require("config")
 local xrandr = require("xrandr")
-
-local batteryarc_widget = require("widgets.batteryarc-widget.batteryarc")
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -435,6 +443,16 @@ root.keys(globalkeys)
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = require("rules")
+
+--mytextclock:connect_signal("mouse::enter",
+--        function(_, _, _, _)
+--            cw.toggle()
+--end)
+
+mytextclock:connect_signal("button::press",
+        function(_, _, _, button)
+            if button == 1 then cw.toggle() end
+        end)
 
 require("signals")
 
