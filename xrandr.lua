@@ -4,30 +4,35 @@ local gtable  = require("gears.table")
 local spawn   = require("awful.spawn")
 local naughty = require("naughty")
 
+local HOME = os.getenv("HOME")
+
 -- Initial config
 local config = {
     icon_path = "",
-    layouts_config_path = "/home/svechnik/.config/awesome/screen_layout_saves.lua", -- TODO make path from home directory
+    layouts_config_path = HOME .. "/.config/awesome/screen_layout_saves.lua",
 }
 
 -- Functions declaration
 local load_from_config_or_init
 local load_layouts_config
 local get_active_output_screens
-local find_config_for_current_screens
+local get_config_for_current_screens
 local apply_config
-local is_two_tables_content_equal
+local screen_change_handler
 
 local cycle_choices_and_apply
 local save_config
 
+-- Variables
+-- Display xrandr notifications from choices
+local state = { cid = nil }
 
 local function start_up()
     load_from_config_or_init()
 end
 
 load_from_config_or_init = function()
-    local available_config, _ = find_config_for_current_screens()
+    local available_config = get_config_for_current_screens()
     if available_config then
         apply_config(available_config)
     else
@@ -35,24 +40,11 @@ load_from_config_or_init = function()
     end
 end
 
-find_config_for_current_screens = function()
-    local available_config
-
+get_config_for_current_screens = function()
     local output_screens = get_active_output_screens()
     local layouts_configuration = load_layouts_config()
-    local index
 
-    for _, layout_configuration in pairs(layouts_configuration) do
-        local layouts_configuration_monitors = layout_configuration[3]
-
-        if is_two_tables_content_equal(output_screens, layouts_configuration_monitors) then
-            available_config = layout_configuration
-            index = _
-            break
-        end
-    end
-
-    return available_config, index
+    return layouts_configuration[table.concat(output_screens, " ")]
 end
 
 get_active_output_screens = function()
@@ -69,16 +61,16 @@ get_active_output_screens = function()
         xrandr:close()
     end
 
+    table.sort(outputs)
+
     return outputs
 end
 
 load_layouts_config = function()
     local layouts_configuration = {}
-    local count = 1
 
     Entry = function(a)
-        layouts_configuration[count] = a
-        count = count + 1
+        layouts_configuration[a[4]] = a
     end
 
     dofile(config.layouts_config_path) -- warning: some bad lua code can sneak in here
@@ -86,29 +78,11 @@ load_layouts_config = function()
     return layouts_configuration
 end
 
-is_two_tables_content_equal = function(table_1, table_2)
-    local is_length_equal = (#table_1 ~= #table_2) -- TODO: need to think of comparing table sizes more carefully
-    local is_table_2_has_content_of_table_1 = true
-
-    local table_2_as_set = {}
-
-    -- make a set from table_2 to check content in one cycle
-    for _, val in pairs(table_2) do
-        table_2_as_set[val] = true
-    end
-
-    for _, val in pairs(table_1) do
-        if not table_2_as_set[val] then
-            is_table_2_has_content_of_table_1 = false
-            break
-        end
-    end
-
-    return is_length_equal and is_table_2_has_content_of_table_1
-end
-
 apply_config = function(available_config)
-    awful.spawn(available_config[2], false)
+    --naughty.notify({ preset = naughty.config.presets.critical,
+    --                 title = "Screens handling",
+    --                 text = available_config[2] })
+    spawn(available_config[2], false)
 end
 
 local function arrange(out)
@@ -155,14 +129,12 @@ local function menu()
 
     for _, choice in pairs(choices) do
         local cmd = "xrandr"
-        local monitors = choice
         -- Enabled outputs
         for i, o in pairs(choice) do
             cmd = cmd .. " --output " .. o .. " --auto"
             if i > 1 then
                 cmd = cmd .. " --right-of " .. choice[i-1]
             end
-            monitors[i] = o
         end
         -- Disabled outputs
         for _, o in pairs(out) do
@@ -181,14 +153,12 @@ local function menu()
             end
         end
 
-        menu[#menu + 1] = { label, cmd , monitors }
+        menu[#menu + 1] = { label, cmd , out , table.concat(out, " ")}
+        -- TODO: it seems 3-d parameter "out" not used anymore - need to check it and remove
     end
 
     return menu
 end
-
--- Display xrandr notifications from choices
-local state = { cid = nil }
 
 local function naughty_destroy_callback(reason)
     if reason == naughty.notificationClosedReason.expired or
@@ -200,7 +170,7 @@ local function naughty_destroy_callback(reason)
             state.index = nil
 
             -- save config to file
-            save_config()
+            --save_config()
         end
     end
 end
@@ -258,14 +228,14 @@ save_config = function()
     current_layout = state.current
 
     -- check if there is existing config for current monitors
-    local available_config, index = find_config_for_current_screens()
+    local available_config = get_config_for_current_screens()
 
-    if available_config and index then
+    if available_config then
         -- if there is an existing config -> overwrite it
-        layouts_configuration[index] = current_layout
+        layouts_configuration[available_config[4]] = current_layout
     else
         -- else -> add new entry
-        layouts_configuration[#layouts_configuration + 1] = current_layout
+        layouts_configuration[current_layout[4]] = current_layout
     end
 
     -- write new config in file
@@ -278,8 +248,17 @@ save_config = function()
     io.close(config_file)
 end
 
+screen_change_handler = function(output, output_state)
+    load_from_config_or_init()
+
+    if output_state == "Disconnected" then
+        spawn("xrandr --output " .. output .. " --off", false)
+    end
+end
+
 return {
     xrandr = cycle_choices_and_apply,
     start_up = start_up,
     save_config = save_config,
+    screen_change_handler = screen_change_handler,
 }

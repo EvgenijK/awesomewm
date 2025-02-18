@@ -459,4 +459,6 @@ require("signals")
 -- implementing XDG Autostart (xorg-xrdb and dex required)
 require("xdg_autostart")
 
-xrandr.xrandr()
+xrandr.start_up()
+
+awesome.connect_signal("screen::change", xrandr.screen_change_handler)
