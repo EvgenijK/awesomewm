@@ -328,7 +328,10 @@ globalkeys = gears.table.join(
         xrandr.save_config()
         end,
         { description = "save current xrandr config", group = "multi-screens" }
-    )
+    ),
+        awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+") end, { description = "save current xrandr config", group = "audio"} ),
+        awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%-") end),
+        awful.key({ }, "XF86AudioMute", function () awful.util.spawn("amixer -D pulse set Master 1+ toggle") end)
 )
 
 clientkeys = gears.table.join(
