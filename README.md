@@ -7,6 +7,7 @@
   - xorg-xrdb
   - dex
 - xrandr  
+- playerctl (for media keys control, daemon starting with .desktop file)
 
 # Autostart
 

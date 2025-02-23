@@ -322,7 +322,11 @@ globalkeys = gears.table.join(
     ),
         awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+") end, { description = "save current xrandr config", group = "audio"} ),
         awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%-") end),
-        awful.key({ }, "XF86AudioMute", function () awful.util.spawn("amixer -D pulse set Master 1+ toggle") end)
+        awful.key({ }, "XF86AudioMute", function () awful.util.spawn("amixer -D pulse set Master 1+ toggle") end),
+        awful.key({ }, "XF86AudioPlay", function () awful.util.spawn("playerctl play-pause") end),
+        awful.key({ }, "XF86AudioStop", function () awful.util.spawn("playerctl stop") end),
+        awful.key({ }, "XF86AudioNext", function () awful.util.spawn("playerctl next") end),
+        awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end)
 )
 
 clientkeys = gears.table.join(
