@@ -42,6 +42,11 @@ numlockx on
 ```
 in autostart `.desktop` file 
 
+# How to check window class
+```
+xprop WM_CLASS
+```
+
 # Problems
 
 ## Chrome not using gnome keyring
@@ -51,3 +56,7 @@ with:
 ```
 --password-store=gnome-libsecret
 ```
+
+## Ksnip opens its main window before taking screenshot 
+
+Need to UNcheck the option "Hide main window while taking screenshot"
