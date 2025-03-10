@@ -34,7 +34,8 @@ local rules = {
             "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
             "Wpa_gui",
             "veromix",
-            "xtightvncviewer"},
+            "xtightvncviewer",
+            "TomeNET"},
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
         -- and the name shown there might not match defined rules here.
@@ -52,7 +53,13 @@ local rules = {
     { rule_any = {type = { "normal", "dialog" }
     }, properties = { titlebars_enabled = true }
     },
-
+    -- Spawn dialogs centered
+    {
+        rule_any = { type = { "dialog" } },
+        properties = {
+            placement = awful.placement.centered + awful.placement.no_overlap + awful.placement.no_offscreen
+        }
+    },
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
