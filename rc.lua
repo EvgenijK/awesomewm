@@ -42,6 +42,7 @@ beautiful.init(HOME .. "/.config/awesome/themes/zenburn/theme.lua")
 
 local config = require("config")
 local xrandr = require("xrandr")
+local logout_popup = require("widgets.logout-popup-widget.logout-popup")
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -304,10 +305,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
     -- My custom keys
-    awful.key({ modkey }, "l", function()
-                awful.spawn(config.applications.screen_lock)
-            end,
-            {description = "lock screen", group = "custom"}),
+    --awful.key({ modkey }, "l", function()
+    --            awful.spawn(config.applications.screen_lock)
+    --        end,
+    --        {description = "lock screen", group = "custom"}),
 
     -- Multi-screens
     awful.key({ modkey, "Control" , "Shift" }, "p", function()
@@ -326,7 +327,15 @@ globalkeys = gears.table.join(
         awful.key({ }, "XF86AudioPlay", function () awful.util.spawn("playerctl play-pause") end),
         awful.key({ }, "XF86AudioStop", function () awful.util.spawn("playerctl stop") end),
         awful.key({ }, "XF86AudioNext", function () awful.util.spawn("playerctl next") end),
-        awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end)
+        awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("playerctl previous") end),
+        awful.key({ modkey }, "l", function()
+            logout_popup.launch{
+                onpoweroff = function() awful.spawn.with_shell("killall -HUP chrome; shutdown -h +1; " .. config.applications.screen_lock) end,
+                onlock = function() awful.spawn.with_shell(config.applications.screen_lock) end,
+            }
+        end,
+                { description = "Show logout screen", group = "custom" })
+
 )
 
 clientkeys = gears.table.join(

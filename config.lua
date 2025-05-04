@@ -6,7 +6,7 @@ return {
         web_browser = "google-chrome",
         editor_gui = "emacsclient -c -a 'emacs'",
         editor_cmd = "xfce4-terminal -e vim",
-        screen_lock = "xflock4",
+        screen_lock = "xfce4-screensaver-command -l",
     },
     tags = {
         names = {
